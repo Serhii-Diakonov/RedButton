@@ -23,4 +23,5 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - assets/states.json
+    - assets/texts/states.json
+    - assets/imgs/
