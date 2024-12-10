@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
@@ -39,6 +40,7 @@ class Button extends StatefulWidget {
 
 class _ButtonState extends State<Button> {
   bool _pressed = false;
+  DateTime? _lastTapInvocation;
 
   void _press(TapDownDetails details) {
     setState(() {
@@ -57,7 +59,13 @@ class _ButtonState extends State<Button> {
     return GestureDetector(
       onTapDown: _press,
       onTapUp: _release,
-      onTap: widget.onParentPressed,
+      onTap: () {
+        if (_lastTapInvocation == null ||
+            DateTime.now().difference(_lastTapInvocation!).inMilliseconds >= 1000) {
+          widget.onParentPressed();
+          _lastTapInvocation = DateTime.now();
+        }
+      },
       behavior: HitTestBehavior.translucent,
       child: Image.asset(_pressed ? widget.imgPathPressed : widget.imgPath),
     );
